@@ -1,0 +1,60 @@
+name: Google Analytics Report to Slack
+on:
+    schedule:
+        # Runs every day at 1:00（UTC）
+        # - cron: '0 1 * * *'
+        # Runs every Monday at 1:00（UTC）
+        # - cron: '0 1 * * 1'
+        # Runs on the first day of each month at 1:00（UTC）
+        # - cron: '0 1 1 * *'
+    workflow_dispatch:
+        inputs:
+            type:
+                type: choice
+                description: Report type
+                options:
+                    - daily
+                    - weekly
+                    - monthly
+jobs:
+    report_to_slack:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Git Checkout Deno Module
+              uses: actions/checkout@v3
+
+            - name: Setup Deno environment
+              uses: denoland/setup-deno@v1
+              with:
+                  deno-version: v1.x
+
+            - name: Create env file
+              run: |
+                  touch .env
+                  echo SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }} >> .env
+                  echo SLACK_TARGET_CHANNEL=${{ secrets.SLACK_TARGET_CHANNEL }} >> .env
+                  echo SLACK_BOT_USERNAME=${{ secrets.SLACK_BOT_USERNAME }} >> .env
+                  echo SLACK_BOT_EMOJI=${{ secrets.SLACK_BOT_EMOJI }} >> .env
+                  echo GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }} >> .env
+                  echo GCP_PRIVATE_KEY_ID=${{ secrets.GCP_PRIVATE_KEY_ID }} >> .env
+                  echo GCP_PRIVATE_KEY=${{ secrets.GCP_PRIVATE_KEY }} >> .env
+                  echo GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }} >> .env
+                  echo GCP_CLIENT_X509_CERT_URL=${{ secrets.GCP_CLIENT_X509_CERT_URL }} >> .env
+                  echo GOOGLE_ANALYTICS_VIEW_ID=${{ secrets.GOOGLE_ANALYTICS_VIEW_ID }} >> .env
+                  echo RANKING_EXCLUDE_TEXT=${{ secrets.RANKING_EXCLUDE_TEXT }} >> .env
+
+            - name: Run Script if event from workflow_dispatch
+              if: github.event_name == 'workflow_dispatch'
+              run: deno task report ${{ github.event.inputs.type }}
+
+            # - name: Run Script if schedule from daily setting
+            #   if: github.event.schedule == '0 1 * * *'
+            #   run: deno task report daily
+
+            # - name: Run Script if schedule from weekly setting
+            #   if: github.event.schedule == '0 1 * * 1'
+            #   run: deno task report weekly
+
+            # - name: Run Script if schedule from monthly setting
+            #   if: github.event.schedule == '0 1 1 * *'
+            #   run: deno task report monthly
