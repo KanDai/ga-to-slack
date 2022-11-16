@@ -1,6 +1,6 @@
 # Google Analytics Report to Slack
 
-Google Analytics の API を叩いて結果を Slack に連携するプログラムです。GitHub Actions で実行 (GUI / スケジュール実行）が可能です。プログラムは TypeScript で書かれていて、Deno で動作します。
+Google Analytics の API を叩いて結果を Slack に連携するプログラムです。GitHub Actions で実行 (GUI / スケジュール実行）が可能です。プログラムは TypeScript で書かれていて Deno で動作します。
 
 ## レポートについて
 
@@ -36,15 +36,15 @@ YYYY-MM-DD ~ YYYY-MM-DD のランキング
 
 ### レポートの期間
 
-実行時に引数を渡して取得するレポートの期間を指定できます。
+取得するレポートの期間は以下の 3 つから選べます。
 
-| 引数    | 取得する期間              |
-| ------- | ------------------------- |
-| daily   | 前日                      |
-| weekly  | 8 日前〜前日までの 1 週間 |
-| monthly | 先月 1 日〜から先月末     |
+-   daily : 前日
+-   weekly : 8 日前〜前日までの 1 週間
+-   monthly : 先月 1 日〜から先月末
 
 ## 使い方
+
+テンプレートリポジトリになっているので `Use this template` のボタンから新しくリポジトリを作成して各種設定をします。
 
 ### Slack アプリと Google Analytics Reporting API を使うための準備
 
@@ -128,5 +128,3 @@ on:
   if: github.event.schedule == '0 1 1 * *'
   run: deno task report monthly
 ```
-
-TBD
