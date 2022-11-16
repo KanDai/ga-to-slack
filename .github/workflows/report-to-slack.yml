@@ -1,12 +1,12 @@
 name: Google Analytics Report to Slack
 on:
-    schedule:
-        # Runs every day at 1:00（UTC）
-        # - cron: '0 1 * * *'
-        # Runs every Monday at 1:00（UTC）
-        # - cron: '0 1 * * 1'
-        # Runs on the first day of each month at 1:00（UTC）
-        # - cron: '0 1 1 * *'
+    # schedule:
+    # Runs every day at 1:00（UTC）
+    # - cron: '0 1 * * *'
+    # Runs every Monday at 1:00（UTC）
+    # - cron: '0 1 * * 1'
+    # Runs on the first day of each month at 1:00（UTC）
+    # - cron: '0 1 1 * *'
     workflow_dispatch:
         inputs:
             type:
